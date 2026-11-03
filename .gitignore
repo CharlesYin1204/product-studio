@@ -12,3 +12,4 @@ artifacts/backups/
 *.tar.gz
 *.zip
 .DS_Store
+draft_*_folder/
