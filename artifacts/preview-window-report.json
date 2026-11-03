@@ -1,0 +1,10 @@
+{
+  "desktopWidth": 1280,
+  "mobileWidth": 390,
+  "newWindow": true,
+  "worksAfterParentClosed": true,
+  "realDataSavedAndReloaded": true,
+  "vueInteraction": true,
+  "unauthenticatedDenied": true,
+  "errors": []
+}

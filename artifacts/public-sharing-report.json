@@ -1,0 +1,11 @@
+{
+  "publicUrl": "http://154.40.47.111:8080/share/45669742595833297216941053b73cc4ad83dae3e3ba219a3eda1a2dabf36dad",
+  "noLogin": true,
+  "passwordGate": true,
+  "wrongPasswordDenied": true,
+  "directEndpointsProtected": true,
+  "unlockPersists": true,
+  "revocation": true,
+  "readOnly": true,
+  "errors": []
+}

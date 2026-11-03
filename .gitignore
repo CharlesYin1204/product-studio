@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+server/dist/
+web/dist/
+.access-admin
+logs/
+*.log
+artifacts/backups/
+*.tar.gz
+*.zip
+.DS_Store

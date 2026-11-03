@@ -1,0 +1,7 @@
+<script setup lang="ts">
+import ShareSettings from './ShareSettings.vue';
+import {ref,watch} from 'vue';import {useRoute} from 'vue-router';import {api} from './api';import PrototypePreview from './PrototypePreview.vue';import Icon from './Icon.vue';
+const route=useRoute(),item=ref<any>(null),error=ref(''),showShare=ref(false),canShare=ref(false);let sequence=0;
+watch(()=>route.path,async()=>{const n=++sequence;item.value=null;error.value='';try{const result=await api('/items/'+encodeURIComponent(route.path.split('/')[2]||''));if(!['prototype','template'].includes(result.kind))throw new Error('此内容不是交互原型');if(n===sequence){item.value=result;const projects=await api('/projects');canShare.value=projects.some((p:any)=>p.id===result.project_id&&p.role==='owner');}}catch(e:any){if(n===sequence)error.value=e.message;}},{immediate:true});
+</script>
+<template><main class="prototype-window"><header><div><h1>{{item?.title||'原型预览'}}</h1><p>可直接点击交互 · 数据与项目同步<span v-if="item"> · v{{item.version}}</span></p></div><button v-if="canShare" class="primary" @click="showShare=!showShare"><Icon name="Share2" :size="15"/>对外分享</button><a :href="item?`/studio?project=${item.project_id}&type=prototype`:'/studio'" class="secondary"><Icon name="ArrowRight" :size="15"/>返回创作中心</a></header><ShareSettings v-if="showShare&&item" :item-id="item.id"/><div v-if="error" class="error-banner" role="alert">{{error}}</div><PrototypePreview v-else-if="item" :item="item" standalone/><p v-else class="empty-mini">正在读取原型…</p></main></template>
