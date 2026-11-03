@@ -26,15 +26,21 @@ export class Db implements OnModuleInit {
       await this.q('INSERT INTO pm_users(id,email,name,password,admin) VALUES(?,?,?,?,1)',[id,process.env.ADMIN_EMAIL||'admin@product.local','产品负责人',await hash(password,12)]);
       writeFileSync('.access-admin',`账号：${process.env.ADMIN_EMAIL||'admin@product.local'}\n密码：${password}\n`,{mode:0o600});
       const p=uid();
-      const instruction=readFileSync('产品设计需求文档/instruction.md','utf8');
+      const instruction=`# 序构 Product Studio 快速开始
+
+1. 创建一个产品项目并填写目标与范围。
+2. 在需求池中记录用户问题、优先级和验收标准。
+3. 使用产品文档沉淀方案，并通过版本记录追踪修改。
+4. 在 AI 创作中心生成草稿，由产品负责人审核后采用。
+5. 导出成果并进入研发、测试与交付流程。`;
       await this.tx(async c=>{
         await c.execute('INSERT INTO pm_projects(id,name,description,owner_id) VALUES(?,?,?,?)',[p,'AI 产品经理工具','从产品需求出发，连接原型设计、团队评审与研发交付。',id]);
         await c.execute('INSERT INTO pm_members(project_id,user_id,role) VALUES(?,?,?)',[p,id,'owner']);
         const add=async(kind:string,title:string,body:any)=>{const item=uid();await c.execute('INSERT INTO pm_items(id,project_id,kind,title,body,created_by) VALUES(?,?,?,?,?,?)',[item,p,kind,title,JSON.stringify(body),id]);await c.execute('INSERT INTO pm_revisions(id,item_id,version,title,body,actor_id) VALUES(?,?,1,?,?,?)',[uid(),item,title,JSON.stringify(body),id]);};
-        await add('document','产品总体需求 · instruction V1.0.1',{type:'prd',content:instruction,source:'产品设计需求文档/instruction.md'});
+        await add('document','序构 Product Studio · 快速开始',{type:'guide',content:instruction,source:'内置新手引导'});
         const lines=instruction.split('\n').filter(l=>/^[①②③④⑤⑥⑦⑧⑨⑩]|^\d+[，,.]/.test(l));
         for(const [index,line] of lines.entries()) await add('requirement',line.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]|^\d+[，,.]/,'').trim().slice(0,180),{description:line,status:'backlog',priority:index<3?'high':'medium',module:'',release:'',dueDate:'',assignee:'',source:'instruction V1.0.1'});
-        await c.execute('INSERT INTO pm_activity(id,project_id,actor_id,action) VALUES(?,?,?,?)',[uid(),p,id,'导入 instruction V1.0.1 原始需求文档']);
+        await c.execute('INSERT INTO pm_activity(id,project_id,actor_id,action) VALUES(?,?,?,?)',[uid(),p,id,'创建默认项目与新手引导']);
       });
     }
   }
