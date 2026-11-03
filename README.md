@@ -15,6 +15,22 @@
 
 - 微信：`charlesyin6015`
 
+## 产品预览
+
+> 以下截图为产品演示项目，仅用于说明工作流和界面能力。
+
+### 产品工作台
+
+![序构产品工作台](artifacts/workspace-desktop.png)
+
+### AI 创作中心
+
+![序构 AI 创作中心](artifacts/ai-studio-generated.png)
+
+### 交互原型预览
+
+![序构交互原型预览](artifacts/ai-prototype-interaction.png)
+
 ## 目录
 - server/src：身份验证、项目服务、集成与隔离原型编译。
 - server/schema.sql：仅创建 pm_ 前缀新表；不删除已有数据。
